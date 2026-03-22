@@ -10,6 +10,7 @@ const logSchema = new mongoose.Schema({
 const sensorSchema = new mongoose.Schema({
   name: String,
   deviceId: String,
+  deviceType: String,
   temperature: Number,
   humidity: Number,
   lastSeen: String,
