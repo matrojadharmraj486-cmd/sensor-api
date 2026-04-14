@@ -4,7 +4,36 @@ import mongoose from "mongoose";
 // Create sensor
 export const createSensor = async (req, res) => {
   try {
-    const sensor = await Sensor.create(req.body);
+    const { userId, userIds, deviceId, ...rest } = req.body;
+
+    if (!deviceId) {
+      return res.status(400).json({ success: false, message: "deviceId is required" });
+    }
+
+    const incomingUserIds = [];
+    if (typeof userId === "string" && userId.trim()) incomingUserIds.push(userId.trim());
+    if (Array.isArray(userIds)) {
+      for (const id of userIds) {
+        if (typeof id === "string" && id.trim()) incomingUserIds.push(id.trim());
+      }
+    }
+
+    const update = {
+      $set: { ...rest, deviceId }
+    };
+
+    if (incomingUserIds.length > 0) {
+      update.$addToSet = { userIds: { $each: [...new Set(incomingUserIds)] } };
+    }
+
+    // "Create" behaves like upsert-by-deviceId; userIds are appended (deduped) instead of overwritten.
+    const sensor = await Sensor.findOneAndUpdate({ deviceId }, update, {
+      new: true,
+      upsert: true,
+      runValidators: true,
+      setDefaultsOnInsert: true
+    });
+
     return res.status(201).json({ success: true, sensor });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
