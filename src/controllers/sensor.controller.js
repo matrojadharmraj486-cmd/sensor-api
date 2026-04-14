@@ -20,6 +20,21 @@ export const getSensors = async (req, res) => {
   }
 };
 
+// Get sensors by userId (query param)
+export const getSensorsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "userId query param is required" });
+    }
+
+    const sensors = await Sensor.find({ userIds: userId });
+    return res.status(200).json({ success: true, sensors });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 // Get sensor by ID
 export const getSensorById = async (req, res) => {
   try {

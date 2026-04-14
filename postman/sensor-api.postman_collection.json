@@ -1,0 +1,105 @@
+{
+  "info": {
+    "_postman_id": "8e7e7b83-2f2d-4a1a-9a3a-5f0b9f5b8a10",
+    "name": "Sensor API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "sensorId",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Sensor",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Room Sensor\",\n  \"deviceId\": \"dev-001\",\n  \"deviceType\": \"thermo\",\n  \"userIds\": [\"user-1\", \"user-2\"],\n  \"temperature\": 24.5,\n  \"humidity\": 55,\n  \"lastSeen\": \"2026-04-14T10:00:00Z\",\n  \"dataPoints\": 120,\n  \"logs\": [\n    {\n      \"date\": \"2026-04-14\",\n      \"time\": \"10:00\",\n      \"temperature\": 24.5,\n      \"humidity\": 55\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/sensors",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "sensors"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get All Sensors",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/sensors",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "sensors"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Sensor By ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/sensors/{{sensorId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "sensors",
+            "{{sensorId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Sensors By User ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/sensors/by-user?userId={{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "sensors",
+            "by-user"
+          ],
+          "query": [
+            {
+              "key": "userId",
+              "value": "{{userId}}"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
