@@ -1,4 +1,5 @@
 import Sensor from "../models/sensor.model.js";
+import mongoose from "mongoose";
 
 // Create sensor
 export const createSensor = async (req, res) => {
@@ -38,6 +39,10 @@ export const getSensorsByUserId = async (req, res) => {
 // Get sensor by ID
 export const getSensorById = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ success: false, message: "Invalid sensor id" });
+    }
+
     const sensor = await Sensor.findById(req.params.id);
     if (!sensor) {
       return res.status(404).json({ success: false, message: "Sensor not found" });
